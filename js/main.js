@@ -5,6 +5,8 @@ const modal = document.querySelector(".modal")
 const icon = document.querySelector(".icon")
 const select = document.querySelector("select")
 const option = document.querySelector("option")
+const loading = document.querySelector(".loading")
+
 
 form.addEventListener("submit", (e) => {
     e.preventDefault()
@@ -14,12 +16,20 @@ form.addEventListener("submit", (e) => {
     input.value = ""
 })
 
+input.addEventListener("input", (e) => {
+    e.preventDefault()
+    const apiLink = `https://www.themealdb.com/api/json/v1/1/search.php?s=${input.value}`
+
+    getData(apiLink)
+})
+
 
 const getData = async (link) => {
+    loading.classList.add("active")
     const req = await fetch(link)
     const data = await req.json()
     writeData(data);
-
+    loading.classList.remove("active")
 }
 
 const writeData = (data) => {
@@ -75,9 +85,11 @@ writeId = (data) => {
 }
 
 const getArea = async (link) => {
+    loading.classList.add("active")
     const req = await fetch(link)
     const data = await req.json()
-    writeArea(data);
+    loading.classList.remove("active")
+
     writeData(data);
 
 }
@@ -86,11 +98,9 @@ select.addEventListener("change", () => {
     const apiArea = `https://www.themealdb.com/api/json/v1/1/filter.php?a=${select.value}`
     getArea(apiArea);
 
+
 });
 
-writeArea = (data) => {
-
-}
 
 const exit = () => {
     modal.classList.remove("active")
